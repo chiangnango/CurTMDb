@@ -1,19 +1,38 @@
 package com.example.curtmdb.util
 
+import com.example.curtmdb.BuildConfig
+import com.example.curtmdb.api.TMDbService
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object APIUtil {
 
-    val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(10, TimeUnit.SECONDS)
-        .build()
+    // TODO: hide api key
+    const val API_KEY = "984d824a7e9963895e241560c899031a"
+    const val URL = "https://api.themoviedb.org/3/"
 
-    data class HttpException(
-        val code: Int,
-        val msg: String,
-        val body: String?
-    ) : Exception("HTTP $code $msg")
+    val tmdbService: TMDbService by lazy {
+        Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(TMDbService::class.java)
+    }
+
+    val okHttpClient: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                }
+            }.build()
+    }
 }
