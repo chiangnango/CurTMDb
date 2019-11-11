@@ -15,14 +15,19 @@ object APIUtil {
     const val URL = "https://api.themoviedb.org/3/"
 
     val tmdbService: TMDbService by lazy {
-        Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(TMDbService::class.java)
+        createService()
     }
 
-    val okHttpClient: OkHttpClient by lazy {
+    fun createService(url: String = URL, okhttpClient: OkHttpClient = okHttpClient): TMDbService {
+        return Retrofit.Builder()
+            .client(okhttpClient)
+            .baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(TMDbService::class.java)
+    }
+
+    private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
