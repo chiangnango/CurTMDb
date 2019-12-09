@@ -14,6 +14,10 @@ object ImageUtil {
 
     lateinit var imageConfig: ImageConfig
 
+    fun isImageConfigReady(): Boolean {
+        return ::imageConfig.isInitialized
+    }
+
     fun getPopularMoviePosterUrl(context: Context, movie: Movie): String {
         if (!::imageConfig.isInitialized) {
             return ""

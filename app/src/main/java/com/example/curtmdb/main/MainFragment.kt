@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import com.example.curtmdb.R
 import com.example.curtmdb.architecture.InjectorUtil
+import com.example.curtmdb.util.MyLog
 import com.example.curtmdb.widget.PopularMovieAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -26,18 +27,20 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        initAdapter()
         initViewModel()
         initView()
 
         viewModel.fetchData()
     }
 
+    private fun initAdapter() {
+        adapter = PopularMovieAdapter()
+    }
+
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this, InjectorUtil.provideMainViewModelFactory()).get(MainViewModel::class.java)
-        viewModel.popularMovies.observe(viewLifecycleOwner, Observer {
-            adapter.data.addAll(it)
-            adapter.notifyDataSetChanged()
-        })
+        viewModel =
+            ViewModelProvider(this, InjectorUtil.provideMainViewModelFactory(activity!!)).get(MainViewModel::class.java)
         viewModel.showSpinner.observe(viewLifecycleOwner, Observer { show ->
             spinner.visibility = if (show) {
                 View.VISIBLE
@@ -45,19 +48,30 @@ class MainFragment : Fragment() {
                 View.GONE
             }
         })
+
+        viewModel.popularMoviesResult.observe(viewLifecycleOwner, Observer {
+            MyLog.d(TAG, "popularMoviesResult onChanged ${it.size}")
+            showEmptyList(it.size == 0)
+            adapter.submitList(it)
+        })
     }
 
     private fun initView() {
-        with(list) {
+        list.adapter = adapter
+        list.apply {
             layoutManager = LinearLayoutManager(context).apply {
                 orientation = VERTICAL
             }
 
             setHasFixedSize(true)
         }
+    }
 
-        adapter = PopularMovieAdapter().also {
-            list.adapter = it
-        }
+    private fun showEmptyList(show: Boolean) {
+        // TODO: empty view
+    }
+
+    companion object {
+        private val TAG = MainFragment::class.java.simpleName
     }
 }

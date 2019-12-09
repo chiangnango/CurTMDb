@@ -12,5 +12,5 @@ interface TMDbService {
     fun configuration(): Call<APIConfig>
 
     @GET("movie/popular?api_key=${APIUtil.API_KEY}&language=en-US")
-    fun popularMovies(@Query("page") page: Int = 1): Call<PopularResult>
+    fun popularMovies(@Query("page") page: Int): Call<PopularResult>
 }

@@ -4,6 +4,7 @@ import com.example.curtmdb.BuildConfig
 import com.example.curtmdb.api.TMDbService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -28,15 +29,17 @@ object APIUtil {
     }
 
     private val okHttpClient: OkHttpClient by lazy {
+        val logger = HttpLoggingInterceptor().apply {
+            level = Level.BASIC
+        }
+
         OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .apply {
                 if (BuildConfig.DEBUG) {
-                    addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    })
+                    addInterceptor(logger)
                 }
             }.build()
     }

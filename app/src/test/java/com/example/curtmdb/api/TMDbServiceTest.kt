@@ -9,6 +9,7 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.any
 import retrofit2.await
 
 @ExperimentalCoroutinesApi
@@ -44,7 +45,7 @@ class TMDbServiceTest {
     @Test
     fun moviePopular_normalResult() = runBlocking {
         mockServer.enqueue(MockResponse().setBody(JSON_MOVIE_POPULAR))
-        val popular = tmdbService.popularMovies().await()
+        val popular = tmdbService.popularMovies(any()).await()
 
         assertThat(popular.totalPages).isEqualTo(1)
         assertThat(popular.totalResults).isEqualTo(2)

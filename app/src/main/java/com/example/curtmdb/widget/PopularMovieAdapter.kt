@@ -5,13 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.curtmdb.R
 import com.example.curtmdb.data.Movie
 import com.example.curtmdb.util.ImageUtil
 import kotlinx.android.synthetic.main.widget_popular_movie_item.view.*
 
-class PopularMovieAdapter : RecyclerView.Adapter<PopularMovieAdapter.ViewHolder>() {
+class PopularMovieAdapter : PagedListAdapter<Movie, PopularMovieAdapter.ViewHolder>(MOVIE_COMPARATOR) {
 
     var data: MutableList<Movie> = mutableListOf()
 
@@ -20,12 +22,8 @@ class PopularMovieAdapter : RecyclerView.Adapter<PopularMovieAdapter.ViewHolder>
         return ViewHolder(inflater.inflate(R.layout.widget_popular_movie_item, parent, false))
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val movie = data[position]
+        val movie = getItem(position) ?: return
 
         with(holder) {
             val url = ImageUtil.getPopularMoviePosterUrl(itemView.context, movie)
@@ -42,5 +40,15 @@ class PopularMovieAdapter : RecyclerView.Adapter<PopularMovieAdapter.ViewHolder>
         val title: TextView = itemView.title
         val releaseDate: TextView = itemView.release_date
         val voteRate: TextView = itemView.vote_rate
+    }
+
+    companion object {
+        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<Movie>() {
+            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+                oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+                oldItem == newItem
+        }
     }
 }
