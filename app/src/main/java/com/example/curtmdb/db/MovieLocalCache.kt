@@ -6,8 +6,9 @@ import com.example.curtmdb.util.MyLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MovieLocalCache(private val movieDao: MovieDao) {
+class MovieLocalCache @Inject constructor(private val movieDao: MovieDao) {
 
     companion object {
         private val TAG = MovieLocalCache::class.java.simpleName

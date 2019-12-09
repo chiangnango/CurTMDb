@@ -1,5 +1,6 @@
 package com.example.curtmdb.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,16 +10,26 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+import com.example.curtmdb.MyApplication
 import com.example.curtmdb.R
-import com.example.curtmdb.architecture.InjectorUtil
 import com.example.curtmdb.util.MyLog
+import com.example.curtmdb.util.MyViewModelFactory
 import com.example.curtmdb.widget.PopularMovieAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
+import javax.inject.Inject
 
 class MainFragment : Fragment() {
 
+    @Inject
+    lateinit var viewModelFactory: MyViewModelFactory
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: PopularMovieAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (context.applicationContext as MyApplication).appComponent.inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_main, container, false)
@@ -39,8 +50,7 @@ class MainFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel =
-            ViewModelProvider(this, InjectorUtil.provideMainViewModelFactory(activity!!)).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.showSpinner.observe(viewLifecycleOwner, Observer { show ->
             spinner.visibility = if (show) {
                 View.VISIBLE

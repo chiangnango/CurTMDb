@@ -8,8 +8,9 @@ import com.example.curtmdb.util.ImageUtil.imageConfig
 import com.example.curtmdb.util.ImageUtil.isImageConfigReady
 import com.example.curtmdb.util.SingleLiveEvent
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(private val repository: MainRepository) : ViewModel() {
+class MainViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
     private val _showSpinner = SingleLiveEvent<Boolean>()
     val showSpinner: LiveData<Boolean> = _showSpinner

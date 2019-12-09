@@ -10,17 +10,12 @@ import com.example.curtmdb.db.MovieLocalCache
 import com.example.curtmdb.util.APIUtil
 import kotlinx.coroutines.CoroutineScope
 import retrofit2.await
+import javax.inject.Inject
 
-class MainRepository(
+class MainRepository @Inject constructor(
     private val service: TMDbService,
     private val cache: MovieLocalCache
 ) {
-
-    companion object {
-        private const val DATABASE_PAGE_SIZE = 20
-    }
-
-    private lateinit var boundaryCallback: PopularMovieBoundaryCallback
 
     suspend fun fetchTMDbConfiguration(): APIUtil.APIResult<APIConfig> {
         return try {
@@ -33,7 +28,7 @@ class MainRepository(
 
     fun fetchPopularMovies(scope: CoroutineScope): PopularMovieResult {
         val dataSourceFactory = cache.moviesByPopularity()
-        boundaryCallback = PopularMovieBoundaryCallback(scope, service, cache)
+        val boundaryCallback = PopularMovieBoundaryCallback(scope, service, cache)
         val networkException = boundaryCallback.apiException
         val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
             .setBoundaryCallback(boundaryCallback)
@@ -47,4 +42,7 @@ class MainRepository(
         val exception: LiveData<Exception>
     )
 
+    companion object {
+        private const val DATABASE_PAGE_SIZE = 20
+    }
 }
