@@ -4,6 +4,8 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="@dimen/common_min_margin"
+    android:paddingBottom="@dimen/common_min_margin"
     tool:background="@android:color/background_dark">
 
     <ImageView

@@ -1,6 +1,7 @@
 <resources>
     <dimen name="common_margin">16dp</dimen>
     <dimen name="common_short_margin">8dp</dimen>
+    <dimen name="common_min_margin">4dp</dimen>
 
     <dimen name="popular_movie_poster_width">80dp</dimen>
 </resources>
