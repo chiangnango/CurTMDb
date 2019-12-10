@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.example.curtmdb.about.AboutFragment
 import com.example.curtmdb.main.MainFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -15,7 +16,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().add(R.id.fragment_container, MainFragment()).commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, MainFragment())
+                .commit()
         }
     }
 
@@ -30,7 +33,15 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_about -> {
+                if (supportFragmentManager.fragments.filterIsInstance<AboutFragment>().isEmpty()) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, AboutFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

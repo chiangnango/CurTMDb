@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="metallic_gold">#D4AF37</color>
+
+    <color name="tmdb_primary">#01d277</color>
 </resources>
