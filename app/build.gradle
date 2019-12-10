@@ -6,9 +6,16 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+
+// load api key
 def apiKeyFile = rootProject.file("apikey.properties");
 def apiKeyProperties = new Properties()
 apiKeyProperties.load(new FileInputStream(apiKeyFile))
+
+// load signing key
+def signingConfigFile = rootProject.file("signingconfig.properties");
+def signingConfigProperties = new Properties()
+signingConfigProperties.load(new FileInputStream(signingConfigFile))
 
 android {
     compileSdkVersion 29
@@ -22,9 +29,20 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "apikey", apiKeyProperties['apikey'])
     }
+
+    signingConfigs {
+        sample {
+            storeFile file(signingConfigProperties['storeFile'])
+            storePassword signingConfigProperties['storePassword']
+            keyAlias signingConfigProperties['keyAlias']
+            keyPassword signingConfigProperties['keyPassword']
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            signingConfig signingConfigs.sample
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
