@@ -32,7 +32,9 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
                 showSpinner(false)
             }
 
-            popularResult.value = repository.fetchPopularMovies(viewModelScope)
+            if (popularResult.value == null) {
+                popularResult.value = repository.fetchPopularMovies(viewModelScope)
+            }
         }
     }
 
