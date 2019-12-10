@@ -31,10 +31,10 @@
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/poster"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
         tool:text="Jocker" />
 
     <TextView
@@ -43,9 +43,9 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/darker_gray"
         android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/vote_rate"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintEnd_toStartOf="@id/vote_rate"
         tool:text="2019-06-07" />
 
     <TextView
@@ -67,10 +67,11 @@
         android:id="@+id/favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:padding="@dimen/common_short_margin"
         android:src="@drawable/ic_favorite_border"
-        app:layout_constraintStart_toEndOf="@id/vote_rate"
-        app:layout_constraintTop_toTopOf="@id/vote_rate"
         app:layout_constraintBottom_toBottomOf="@id/vote_rate"
-        android:layout_marginStart="@dimen/common_short_margin" />
+        app:layout_constraintStart_toEndOf="@id/vote_rate"
+        app:layout_constraintTop_toTopOf="@id/vote_rate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
