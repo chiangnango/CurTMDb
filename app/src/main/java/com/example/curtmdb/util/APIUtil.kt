@@ -1,9 +1,11 @@
 package com.example.curtmdb.util
 
+import com.example.curtmdb.BuildConfig
+
 object APIUtil {
 
-    // TODO: hide api key
-    const val API_KEY = "984d824a7e9963895e241560c899031a"
+    const val API_KEY: String = BuildConfig.apikey
+
     private const val URL = "https://api.themoviedb.org/3/"
 
     fun getBaseUrl(): String {
