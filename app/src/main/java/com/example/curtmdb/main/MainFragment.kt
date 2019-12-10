@@ -46,7 +46,11 @@ class MainFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        adapter = PopularMovieAdapter()
+        adapter = PopularMovieAdapter().apply {
+            favoriteClickListener = { _, movie ->
+                viewModel.onFavoriteClicked(movie)
+            }
+        }
     }
 
     private fun initViewModel() {

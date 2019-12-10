@@ -41,4 +41,10 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
     private fun showSpinner(show: Boolean) {
         _showSpinner.value = show
     }
+
+    fun onFavoriteClicked(movie: Movie) {
+        viewModelScope.launch {
+            repository.updateMovie(movie.copy(isFavorite = movie.isFavorite.not()))
+        }
+    }
 }

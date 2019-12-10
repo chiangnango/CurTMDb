@@ -1,10 +1,7 @@
 package com.example.curtmdb.db
 
 import androidx.paging.DataSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.curtmdb.data.Movie
 
 @Dao
@@ -16,6 +13,6 @@ interface MovieDao {
     @Query("SELECT * FROM movies")
     fun moviesByPopularity(): DataSource.Factory<Int, Movie>
 
-    @Query("SELECT COUNT(*) FROM movies")
-    fun movieCount(): Int
+    @Update
+    fun updateMovies(vararg movies: Movie)
 }

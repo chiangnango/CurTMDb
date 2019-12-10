@@ -5,7 +5,7 @@ import com.example.curtmdb.data.Movie
 import com.example.curtmdb.util.MyLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieLocalCache @Inject constructor(private val movieDao: MovieDao) {
@@ -15,7 +15,7 @@ class MovieLocalCache @Inject constructor(private val movieDao: MovieDao) {
     }
 
     suspend fun insert(movies: List<Movie>) {
-        withContext(GlobalScope.coroutineContext + Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             MyLog.d(TAG, "inserting ${movies.size} movies")
             movieDao.insert(movies)
         }
@@ -23,5 +23,12 @@ class MovieLocalCache @Inject constructor(private val movieDao: MovieDao) {
 
     fun moviesByPopularity(): DataSource.Factory<Int, Movie> {
         return movieDao.moviesByPopularity()
+    }
+
+    suspend fun update(movie: Movie) {
+        GlobalScope.launch(Dispatchers.IO) {
+            MyLog.d(TAG, "updating $movie")
+            movieDao.updateMovies(movie)
+        }
     }
 }

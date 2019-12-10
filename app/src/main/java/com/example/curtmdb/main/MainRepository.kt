@@ -37,6 +37,10 @@ class MainRepository @Inject constructor(
         return PopularMovieResult(data, networkException)
     }
 
+    suspend fun updateMovie(movie: Movie) {
+        cache.update(movie)
+    }
+
     data class PopularMovieResult(
         val data: LiveData<PagedList<Movie>>,
         val exception: LiveData<Exception>
