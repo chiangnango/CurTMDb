@@ -13,17 +13,29 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
-class AppModule {
+open class AppModule {
+
+    @Retention(AnnotationRetention.BINARY)
+    @Qualifier
+    annotation class APIBaseUrl
+
+    @Singleton
+    @APIBaseUrl
+    @Provides
+    open fun provideBaseUrl(): String {
+        return APIUtil.getBaseUrl()
+    }
 
     @Singleton
     @Provides
-    fun provideTMDbService(okhttpClient: OkHttpClient): TMDbService {
+    fun provideTMDbService(@APIBaseUrl baseUrl: String, okhttpClient: OkHttpClient): TMDbService {
         return Retrofit.Builder()
             .client(okhttpClient)
-            .baseUrl(APIUtil.URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TMDbService::class.java)

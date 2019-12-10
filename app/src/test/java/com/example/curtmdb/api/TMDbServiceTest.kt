@@ -1,7 +1,11 @@
 package com.example.curtmdb.api
 
-import com.example.curtmdb.util.APIUtil.createService
+import com.example.curtmdb.di.DaggerTestAppComponent
+import com.example.curtmdb.util.APIUtil
 import com.google.common.truth.Truth.assertThat
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
@@ -9,19 +13,32 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyInt
 import retrofit2.await
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class TMDbServiceTest {
 
     private lateinit var mockServer: MockWebServer
-    private lateinit var tmdbService: TMDbService
+    @Inject
+    lateinit var tmdbService: TMDbService
 
     @Before
     fun setup() {
+        prepareMockServer()
+        injectTMDbService()
+    }
+
+    private fun prepareMockServer() {
         mockServer = MockWebServer()
-        tmdbService = createService(url = mockServer.url("/").toString())
+        mockkObject(APIUtil)
+        every { APIUtil.getBaseUrl() } returns mockServer.url("/").toString()
+        DaggerTestAppComponent.factory().create(mockk()).inject(this)
+    }
+
+    private fun injectTMDbService() {
+        DaggerTestAppComponent.factory().create(mockk()).inject(this)
     }
 
     @Test
@@ -45,7 +62,7 @@ class TMDbServiceTest {
     @Test
     fun moviePopular_normalResult() = runBlocking {
         mockServer.enqueue(MockResponse().setBody(JSON_MOVIE_POPULAR))
-        val popular = tmdbService.popularMovies(any()).await()
+        val popular = tmdbService.popularMovies(anyInt()).await()
 
         assertThat(popular.totalPages).isEqualTo(1)
         assertThat(popular.totalResults).isEqualTo(2)
