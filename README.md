@@ -25,3 +25,5 @@ And please create file *signingconfig.properties* to install released apk with p
     storePassword=xxx
     keyAlias=xxx
     keyPassword=xxx
+
+###### This product uses the TMDb API but is not endorsed or certified by TMDb.
