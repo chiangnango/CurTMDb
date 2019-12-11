@@ -10,6 +10,9 @@ Because there are a large amount of movies, when scroll to bottom, app will auto
 The app is written in Kotlin and uses Android Architecture Components - **ViewModel, LiveData & Room**, and **Dagger2** for dependency injection.
 It also uses **Kotlin Coroutine** and **Retrofit2** to fetch data, and **Paging** library help to handle load and display popular movies list.
 
+There're 2 modules: AppModule containing all dependencies provides method app need: database, Dao, okHttpClient and RetrofitService;
+ViewModelModule provides ViewModelFactory via Dagger multi-bindings.
+
 For security concern, in project root folder, please create file *apikey.properties* to successfully fetch api:
     
     // apikey.properties
@@ -22,4 +25,3 @@ And please create file *signingconfig.properties* to install released apk with p
     storePassword=xxx
     keyAlias=xxx
     keyPassword=xxx
-
